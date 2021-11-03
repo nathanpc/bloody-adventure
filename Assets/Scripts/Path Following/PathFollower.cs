@@ -17,13 +17,13 @@ public class PathFollower : MonoBehaviour {
 	public bool useWaypointRotation = false;
 	public bool showDebug = false;
 	private Transform tCharacter;
-	private List<Transform> targets;
+	private List<Vector3> targets;
 	private Vector3 characterForward;
 
 	// Start is called before the first frame update
 	private void Start() {
 		// Initialize some properties.
-		targets = new List<Transform>();
+		targets = new List<Vector3>();
 		if (controlledCharacter == null)
 			controlledCharacter = this.gameObject;
 		tCharacter = controlledCharacter.transform;
@@ -55,7 +55,7 @@ public class PathFollower : MonoBehaviour {
 		// Check if we have reached our waypoint.
 		if (IsAtWaypoint()) {
 			if (showDebug)
-				Debug.Log("Arrived at: " + targets[0].gameObject.name);
+				Debug.Log("Arrived at: " + targets[0]);
 
 			// Move to the next waypoint.
 			MoveToNextWaypoint();
@@ -97,9 +97,10 @@ public class PathFollower : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Gets waypoints tranforms from a given container <see cref="GameObject"/>.
+	/// Gets waypoints transforms from a given container <see cref="GameObject"/>.
 	/// </summary>
 	/// <param name="waypointsParent">Container of waypoints.</param>
+	/// <returns>Waypoints tranforms list.</returns>
 	private List<Transform> GetWaypointsTransforms(GameObject waypointsParent) {
 		List<Transform> transforms = new List<Transform>();
 
@@ -116,11 +117,32 @@ public class PathFollower : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Gets waypoints positions from a given container <see cref="GameObject"/>.
+	/// </summary>
+	/// <param name="waypointsParent">Container of waypoints.</param>
+	/// <returns>Waypoints positions list.</returns>
+	private List<Vector3> GetWaypointsPositions(GameObject waypointsParent) {
+		List<Vector3> positions = new List<Vector3>();
+
+		// Shallow copy the list.
+		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>()) {
+			// Ignore ourself.
+			if (transform.gameObject == waypointContainer)
+				continue;
+
+			positions.Add(transform.position);
+		}
+
+		return positions;
+	}
+
+	/// <summary>
 	/// Sets the current waypoints container <see cref="GameObject"/>
 	/// </summary>
 	/// <param name="waypointsParent">Container of waypoints.</param>
 	public void SetWaypointContainer(GameObject waypointsParent) {
-		targets.AddRange(GetWaypointsTransforms(waypointsParent));
+		targets.AddRange(BezierCurve.SampleCurveWithPoints(
+			GetWaypointsPositions(waypointsParent)));
 	}
 
 	/// <summary>
@@ -133,12 +155,12 @@ public class PathFollower : MonoBehaviour {
 
 		// Fix problems with glitches when ignoring the Y.
 		if (ignoreY)
-			targets[0].position = new Vector3(targets[0].position.x, tCharacter.position.y,
-				targets[0].position.z);
+			targets[0] = new Vector3(targets[0].x, tCharacter.position.y,
+				targets[0].z);
 
 		// Move our object towards the waypoint.
 		float moveStep = movementSpeed * Time.deltaTime;
-		tCharacter.position = Vector3.MoveTowards(tCharacter.position, targets[0].position, moveStep);
+		tCharacter.position = Vector3.MoveTowards(tCharacter.position, targets[0], moveStep);
 
 		// Rotate the object towards the waypoint.
 		if (!ignoreRotation) {
@@ -146,12 +168,12 @@ public class PathFollower : MonoBehaviour {
 
 			// Use waypoint rotation?
 			if (useWaypointRotation) {
-				tCharacter.rotation = Quaternion.Lerp(tCharacter.rotation, targets[0].rotation, rotationStep);
+				//tCharacter.rotation = Quaternion.Lerp(tCharacter.rotation, targets[0].rotation, rotationStep);
 			} else {
 				// Rotate towards the next waypoint.
-				//Vector3 direction = targets[0].position - tCharacter.position;
-				//Quaternion toRotation = Quaternion.FromToRotation(characterForward, direction);
-				//tCharacter.rotation = Quaternion.RotateTowards(tCharacter.rotation, toRotation, 10);
+				Vector3 direction = targets[0] - tCharacter.position;
+				Quaternion toRotation = Quaternion.FromToRotation(characterForward, direction);
+				tCharacter.rotation = Quaternion.RotateTowards(tCharacter.rotation, toRotation, 10);
 			}
 		}
 	}
@@ -161,7 +183,7 @@ public class PathFollower : MonoBehaviour {
 	/// </summary>
 	public void MoveToNextWaypoint() {
 		// Remember the last animation and waypoint.
-		WaypointBase lastWaypoint = targets[0].GetComponent<WaypointBase>();
+		//WaypointBase lastWaypoint = targets[0].GetComponent<WaypointBase>();
 
 		// Remove the first element to go to the next one.
 		targets.RemoveAt(0);
@@ -169,10 +191,10 @@ public class PathFollower : MonoBehaviour {
 		characterForward = tCharacter.forward;
 		if (targets.Count > 0) {
 			if (!useWaypointRotation)
-				tCharacter.LookAt(targets[0].position);
+				tCharacter.LookAt(targets[0]);
 
-			if (lastWaypoint == null)
-				return;
+			//if (lastWaypoint == null)
+			//	return;
 
 			if (showDebug)
 				Debug.Log("Path Follower: Move to next waypoint play run animation");
@@ -187,7 +209,7 @@ public class PathFollower : MonoBehaviour {
 	public bool IsAtWaypoint(bool ignoreTimer = false) {
 		bool atWaypoint = false;
 		Vector3 posCharacter = tCharacter.position;
-		Vector3 posTarget = targets[0].position;
+		Vector3 posTarget = targets[0];
 
 		// Ignore the Y coordinate?
 		if (ignoreY) {
@@ -201,6 +223,7 @@ public class PathFollower : MonoBehaviour {
 			return atWaypoint;
 
 		if (atWaypoint) {
+			/*
 			// Stop for a while?
 			WaypointStop stop = targets[0].GetComponent<WaypointStop>();
 			if (stop != null) {
@@ -218,6 +241,7 @@ public class PathFollower : MonoBehaviour {
 			// Make sure we can continue after a stop.
 			if (stop != null)
 				return stop.TimesUp();
+			*/
 		}
 
 		return atWaypoint;
