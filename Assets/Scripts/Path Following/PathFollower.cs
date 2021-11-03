@@ -12,9 +12,7 @@ public class PathFollower : MonoBehaviour {
 	public float movementSpeed = 2.0f;
 	public float rotationSpeed = 1.0f;
 	public bool autoStart = false;
-	public bool ignoreY = true;
 	public bool ignoreRotation = false;
-	public bool useWaypointRotation = false;
 	public bool showDebug = false;
 	private Transform tCharacter;
 	private List<Vector3> targets;
@@ -65,35 +63,6 @@ public class PathFollower : MonoBehaviour {
 	// Draw gizmos in the editor.
 	private void OnDrawGizmos() {
 		DrawBezierPathLines(Color.yellow);
-	}
-
-	/// <summary>
-	/// Draws Bezier debug lines for positioning waypoints.
-	/// </summary>
-	public void DrawBezierPathLines(Color gizmoColor) {
-		List<Vector3> points = BezierCurve.SampleCurveWithPoints(
-			UnityManipulator.ListTransformsPosition(GetWaypointsTransforms(waypointContainer)));
-		Gizmos.color = gizmoColor;
-
-		for (int i = 1; i < points.Count; i++) {
-			Gizmos.DrawLine(points[i - 1], points[i]);
-		}
-	}
-
-	/// <summary>
-	/// Draws straight debug lines for positioning waypoints.
-	/// </summary>
-	public void DrawStraightPathLines(Color gizmoColor) {
-		// Go through GameObject childs.
-		Vector3 startPos = controlledCharacter.transform.position;
-		foreach (Transform transform in GetWaypointsTransforms(waypointContainer)) {
-			// Show a nice line between the waypoints.
-			Gizmos.color = gizmoColor;
-			Gizmos.DrawLine(startPos, transform.position);
-			Gizmos.DrawWireSphere(transform.position, 0.1f);
-
-			startPos = transform.position;
-		}
 	}
 
 	/// <summary>
@@ -153,11 +122,6 @@ public class PathFollower : MonoBehaviour {
 		if (IsAtWaypoint(true))
 			return;
 
-		// Fix problems with glitches when ignoring the Y.
-		if (ignoreY)
-			targets[0] = new Vector3(targets[0].x, tCharacter.position.y,
-				targets[0].z);
-
 		// Move our object towards the waypoint.
 		float moveStep = movementSpeed * Time.deltaTime;
 		tCharacter.position = Vector3.MoveTowards(tCharacter.position, targets[0], moveStep);
@@ -166,15 +130,20 @@ public class PathFollower : MonoBehaviour {
 		if (!ignoreRotation) {
 			float rotationStep = rotationSpeed * Time.deltaTime;
 
+			Vector3 newDirection = Vector3.RotateTowards(tCharacter.forward,
+				targets[0] - tCharacter.position, rotationStep, 0.0f);
+			tCharacter.rotation = Quaternion.LookRotation(newDirection);
+			/*
 			// Use waypoint rotation?
-			if (useWaypointRotation) {
+			//if (useWaypointRotation) {
 				//tCharacter.rotation = Quaternion.Lerp(tCharacter.rotation, targets[0].rotation, rotationStep);
-			} else {
+			//} else {
 				// Rotate towards the next waypoint.
 				Vector3 direction = targets[0] - tCharacter.position;
 				Quaternion toRotation = Quaternion.FromToRotation(characterForward, direction);
 				tCharacter.rotation = Quaternion.RotateTowards(tCharacter.rotation, toRotation, 10);
-			}
+			//}
+			*/
 		}
 	}
 
@@ -182,16 +151,13 @@ public class PathFollower : MonoBehaviour {
 	/// Starts moving the character to its next waypoint.
 	/// </summary>
 	public void MoveToNextWaypoint() {
-		// Remember the last animation and waypoint.
-		//WaypointBase lastWaypoint = targets[0].GetComponent<WaypointBase>();
-
 		// Remove the first element to go to the next one.
 		targets.RemoveAt(0);
 
 		characterForward = tCharacter.forward;
 		if (targets.Count > 0) {
-			if (!useWaypointRotation)
-				tCharacter.LookAt(targets[0]);
+			// Look at the next target.
+			//tCharacter.LookAt(targets[0]);
 
 			//if (lastWaypoint == null)
 			//	return;
@@ -210,12 +176,6 @@ public class PathFollower : MonoBehaviour {
 		bool atWaypoint = false;
 		Vector3 posCharacter = tCharacter.position;
 		Vector3 posTarget = targets[0];
-
-		// Ignore the Y coordinate?
-		if (ignoreY) {
-			posCharacter.y = 0;
-			posTarget.y = 0;
-		}
 
 		// Check if we have reached the waypoint already.
 		atWaypoint = Vector3.Distance(posCharacter, posTarget) < 0.1f;
@@ -261,5 +221,34 @@ public class PathFollower : MonoBehaviour {
 	/// <returns><see cref="GameObject"/> of the character.</returns>
 	public GameObject GetControlledCharacter() {
 		return controlledCharacter;
+	}
+
+	/// <summary>
+	/// Draws Bezier debug lines for positioning waypoints.
+	/// </summary>
+	public void DrawBezierPathLines(Color gizmoColor) {
+		List<Vector3> points = BezierCurve.SampleCurveWithPoints(
+			UnityManipulator.ListTransformsPosition(GetWaypointsTransforms(waypointContainer)));
+		Gizmos.color = gizmoColor;
+
+		for (int i = 1; i < points.Count; i++) {
+			Gizmos.DrawLine(points[i - 1], points[i]);
+		}
+	}
+
+	/// <summary>
+	/// Draws straight debug lines for positioning waypoints.
+	/// </summary>
+	public void DrawStraightPathLines(Color gizmoColor) {
+		// Go through GameObject childs.
+		Vector3 startPos = controlledCharacter.transform.position;
+		foreach (Transform transform in GetWaypointsTransforms(waypointContainer)) {
+			// Show a nice line between the waypoints.
+			Gizmos.color = gizmoColor;
+			Gizmos.DrawLine(startPos, transform.position);
+			Gizmos.DrawWireSphere(transform.position, 0.1f);
+
+			startPos = transform.position;
+		}
 	}
 }

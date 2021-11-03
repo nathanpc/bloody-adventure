@@ -279,7 +279,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602147443}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0000053525528, z: 0.125}
+  m_LocalPosition: {x: 0, y: 1.08, z: -1.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 773177638}
@@ -469,7 +469,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773177637}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.53, z: 0.28}
+  m_LocalPosition: {x: 0, y: -1.071, z: -0.161}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 602147444}
@@ -703,12 +703,10 @@ MonoBehaviour:
   controlledCharacter: {fileID: 1629919436}
   waypointContainer: {fileID: 602147443}
   movementSpeed: 1
-  rotationSpeed: 0.01
+  rotationSpeed: 1
   autoStart: 1
-  ignoreY: 0
   ignoreRotation: 0
-  useWaypointRotation: 0
-  showDebug: 1
+  showDebug: 0
 --- !u!43 &1850356089
 Mesh:
   m_ObjectHideFlags: 0
