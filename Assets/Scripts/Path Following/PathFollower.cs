@@ -7,14 +7,15 @@ using UnityEngine;
 /// the child objects of another <see cref="GameObject"/>.
 /// </summary>
 public class PathFollower : MonoBehaviour {
-	public GameObject waypointContainer;
+	public GameObject controlledCharacter = null;
+	public GameObject waypointContainer = null;
 	public float movementSpeed = 2.0f;
 	public float rotationSpeed = 1.0f;
+	public bool autoStart = false;
 	public bool ignoreY = true;
 	public bool ignoreRotation = false;
 	public bool useWaypointRotation = false;
 	public bool showDebug = false;
-	private GameObject controlledCharacter;
 	private Transform tCharacter;
 	private List<Transform> targets;
 	private Vector3 characterForward;
@@ -23,9 +24,19 @@ public class PathFollower : MonoBehaviour {
 	private void Start() {
 		// Initialize some properties.
 		targets = new List<Transform>();
-		controlledCharacter = this.gameObject;
+		if (controlledCharacter == null)
+			controlledCharacter = this.gameObject;
 		tCharacter = controlledCharacter.transform;
 		characterForward = tCharacter.forward;
+
+		// Auto start the path following?
+		if (autoStart) {
+			// Do we even have a waypoint container.
+			if (waypointContainer == null)
+				return;
+
+			SetWaypointContainer(waypointContainer);
+		}
 	}
 
 	// Update is called once per frame
@@ -51,20 +62,50 @@ public class PathFollower : MonoBehaviour {
 		}
 	}
 
+	// Draw gizmos in the editor.
+	private void OnDrawGizmos() {
+		DrawPathLines();
+	}
+
+	/// <summary>
+	/// Draws some pretty debug lines for positioning waypoints.
+	/// </summary>
+	public void DrawPathLines() {
+		// Go through GameObject childs.
+		Vector3 startPos = controlledCharacter.transform.position;
+		foreach (Transform transform in GetWaypointsTransforms(waypointContainer)) {
+			// Ignore if we got ourself.
+			if (transform.gameObject == waypointContainer)
+				continue;
+
+			// Show a nice line between the waypoints.
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawLine(startPos, transform.position);
+			Gizmos.DrawWireSphere(transform.position, 0.1f);
+			startPos = transform.position;
+		}
+	}
+
+	/// <summary>
+	/// Gets waypoints tranforms from a given container <see cref="GameObject"/>.
+	/// </summary>
+	/// <param name="waypointsParent">Container of waypoints.</param>
+	private List<Transform> GetWaypointsTransforms(GameObject waypointsParent) {
+		List<Transform> transforms = new List<Transform>();
+
+		// Shallow copy the list.
+		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>())
+			transforms.Add(transform);
+
+		return transforms;
+	}
+
 	/// <summary>
 	/// Sets the current waypoints container <see cref="GameObject"/>
 	/// </summary>
 	/// <param name="waypointsParent">Container of waypoints.</param>
 	public void SetWaypointContainer(GameObject waypointsParent) {
-		// Go through GameObject childs.
-		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>()) {
-			// Ignore if we got ourself.
-			if (transform.gameObject == waypointsParent)
-				continue;
-
-			// Add to the list of targets.
-			targets.Add(transform);
-		}
+		targets.AddRange(GetWaypointsTransforms(waypointsParent));
 	}
 
 	/// <summary>
