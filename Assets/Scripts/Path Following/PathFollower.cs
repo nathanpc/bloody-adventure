@@ -64,24 +64,34 @@ public class PathFollower : MonoBehaviour {
 
 	// Draw gizmos in the editor.
 	private void OnDrawGizmos() {
-		DrawPathLines();
+		DrawBezierPathLines(Color.yellow);
 	}
 
 	/// <summary>
-	/// Draws some pretty debug lines for positioning waypoints.
+	/// Draws Bezier debug lines for positioning waypoints.
 	/// </summary>
-	public void DrawPathLines() {
+	public void DrawBezierPathLines(Color gizmoColor) {
+		List<Vector3> points = BezierCurve.SampleCurveWithPoints(
+			UnityManipulator.ListTransformsPosition(GetWaypointsTransforms(waypointContainer)));
+		Gizmos.color = gizmoColor;
+
+		for (int i = 1; i < points.Count; i++) {
+			Gizmos.DrawLine(points[i - 1], points[i]);
+		}
+	}
+
+	/// <summary>
+	/// Draws straight debug lines for positioning waypoints.
+	/// </summary>
+	public void DrawStraightPathLines(Color gizmoColor) {
 		// Go through GameObject childs.
 		Vector3 startPos = controlledCharacter.transform.position;
 		foreach (Transform transform in GetWaypointsTransforms(waypointContainer)) {
-			// Ignore if we got ourself.
-			if (transform.gameObject == waypointContainer)
-				continue;
-
 			// Show a nice line between the waypoints.
-			Gizmos.color = Color.yellow;
+			Gizmos.color = gizmoColor;
 			Gizmos.DrawLine(startPos, transform.position);
 			Gizmos.DrawWireSphere(transform.position, 0.1f);
+
 			startPos = transform.position;
 		}
 	}
@@ -94,8 +104,13 @@ public class PathFollower : MonoBehaviour {
 		List<Transform> transforms = new List<Transform>();
 
 		// Shallow copy the list.
-		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>())
+		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>()) {
+			// Ignore ourself.
+			if (transform.gameObject == waypointContainer)
+				continue;
+
 			transforms.Add(transform);
+		}
 
 		return transforms;
 	}
