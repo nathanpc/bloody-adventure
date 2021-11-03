@@ -14,11 +14,15 @@ public class Pipe : MonoBehaviour {
 	private Pipe previousPipe = null;
 	[SerializeField]
 	private GameObject middleConnection = null;
+	[SerializeField]
+	private GameObject waypointContainer = null;
+	private TubeBuilder builder = null;
 	public bool appe = false;
 
 	public void Start() {
 		NextPipes = new List<Pipe>();
 		AppendPipes();
+		Builder = gameObject.GetComponentInParent<TubeBuilder>();
 	}
 
 	public void Update() {
@@ -93,5 +97,21 @@ public class Pipe : MonoBehaviour {
 	public Pipe PreviousPipe {
 		get { return previousPipe; }
 		set { previousPipe = value; }
+	}
+
+	/// <summary>
+	/// Path builder parent object.
+	/// </summary>
+	public TubeBuilder Builder {
+		get { return builder; }
+		set { builder = value; }
+	}
+
+	/// <summary>
+	/// Pipe's internal waypoint container for the player's path.
+	/// </summary>
+	public GameObject WaypointContainer {
+		get { return waypointContainer; }
+		set { waypointContainer = value; }
 	}
 }

@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &443461682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1588207184544117328, guid: dff697b1f1952094db5fb3e86558afee, type: 3}
+  m_PrefabInstance: {fileID: 1588207185635191044}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &505445398
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,7 +249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602147443}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19980079, y: 0.0000053525528, z: 2.050772}
+  m_LocalPosition: {x: 0, y: 0.0000053525528, z: 2.050772}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 773177638}
@@ -369,7 +374,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773177637}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.19980103, y: -0.59400535, z: 0.28}
+  m_LocalPosition: {x: 0, y: 0, z: 0.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 602147444}
@@ -399,7 +404,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942164413}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.19980103, y: -0.59400535, z: 1.6092281}
+  m_LocalPosition: {x: 0, y: 0, z: 1.6092281}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 602147444}
@@ -497,7 +502,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 972130587}
-  - component: {fileID: 972130588}
   m_Layer: 0
   m_Name: Path
   m_TagString: Untagged
@@ -520,20 +524,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &972130588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 972130586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2dccb18800cc7f04da69834e26f1adbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pipeContainer: {fileID: 2143868879}
-  currentPipe: {fileID: 0}
 --- !u!4 &1107008341 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1588207184544117329, guid: dff697b1f1952094db5fb3e86558afee, type: 3}
@@ -585,11 +575,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e7b11d98455404eb43ef728e04bba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointContainer: {fileID: 602147443}
-  movementSpeed: 2
+  waypointContainer: {fileID: 0}
+  movementSpeed: 1
   rotationSpeed: 1
-  repeat: 1
-  ignoreY: 1
+  ignoreY: 0
   ignoreRotation: 0
   useWaypointRotation: 0
   showDebug: 0
@@ -766,6 +755,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2143868880}
+  - component: {fileID: 2143868881}
   m_Layer: 0
   m_Name: Pipe Container
   m_TagString: Untagged
@@ -788,6 +778,20 @@ Transform:
   m_Father: {fileID: 972130587}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2143868881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143868879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dccb18800cc7f04da69834e26f1adbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPipe: {fileID: 443461682}
+  follower: {fileID: 1629919440}
 --- !u!1001 &1588207185635191044
 PrefabInstance:
   m_ObjectHideFlags: 0

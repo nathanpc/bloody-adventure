@@ -10,7 +10,6 @@ public class PathFollower : MonoBehaviour {
 	public GameObject waypointContainer;
 	public float movementSpeed = 2.0f;
 	public float rotationSpeed = 1.0f;
-	public bool repeat = true;
 	public bool ignoreY = true;
 	public bool ignoreRotation = false;
 	public bool useWaypointRotation = false;
@@ -22,31 +21,21 @@ public class PathFollower : MonoBehaviour {
 
 	// Start is called before the first frame update
 	private void Start() {
-		if (waypointContainer == null)
-			MoreDebug.LogUnassignedReference(this.gameObject, nameof(waypointContainer));
-
 		// Initialize some properties.
 		targets = new List<Transform>();
 		controlledCharacter = this.gameObject;
 		tCharacter = controlledCharacter.transform;
 		characterForward = tCharacter.forward;
-
-		// Populate the waypoint container.
-		RestartPath();
 	}
 
 	// Update is called once per frame
 	private void Update() {
 		// Check if we have reached our final destination.
 		if (IsAtFinalDestination()) {
-			if (repeat) {
-				RestartPath();
-			} else {
-				if (showDebug)
-					Debug.Log("Path Follower: Final waypoint no last animation play stop animation");
+			if (showDebug)
+				Debug.Log("Path Follower: Final waypoint no last animation play stop animation");
 
-				return;
-			}
+			return;
 		}
 
 		// Move to the current waypoint.
@@ -132,14 +121,6 @@ public class PathFollower : MonoBehaviour {
 			if (showDebug)
 				Debug.Log("Path Follower: Move to next waypoint play run animation");
 		}
-	}
-
-	/// <summary>
-	/// (Re)starts the object path from the first waypoint.
-	/// </summary>
-	public void RestartPath() {
-		// Set ourselves as the waypoint container.
-		SetWaypointContainer(waypointContainer);
 	}
 
 	/// <summary>

@@ -7,14 +7,16 @@ using UnityEngine;
 /// player will be inside of.
 /// </summary>
 public class TubeBuilder : MonoBehaviour {
-	[SerializeField]
 	private GameObject pipeContainer = null;
 	[SerializeField]
 	private GameObject currentPipe = null;
+	[SerializeField]
+	private PathFollower follower = null;
 
 	// Start is called before the first frame update
 	void Start() {
-
+		Container = gameObject;
+		Follower.SetWaypointContainer(currentPipe.GetComponent<Pipe>().WaypointContainer);
 	}
 
 	// Update is called once per frame
@@ -36,5 +38,13 @@ public class TubeBuilder : MonoBehaviour {
 	public GameObject CurrentTube {
 		get { return currentPipe; }
 		set { currentPipe = value; }
+	}
+
+	/// <summary>
+	/// Player's path following controller.
+	/// </summary>
+	public PathFollower Follower {
+		get { return follower; }
+		set { follower = value; }
 	}
 }
