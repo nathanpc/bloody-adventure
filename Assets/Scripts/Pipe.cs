@@ -11,30 +11,45 @@ public class Pipe : MonoBehaviour {
 	[SerializeField] private List<Pipe> nextPipes = null;
 	[SerializeField] private Pipe previousPipe = null;
 	[SerializeField] private GameObject middleConnection = null;
+	[SerializeField] private GameObject pipesLoadingPoint = null;
 	[SerializeField] private GameObject waypointContainer = null;
+	[SerializeField] private Pipe nextPipeSelected = null;
 	private TubeBuilder builder = null;
-	public bool appe = false;
-	public bool connectedWaypoints = false;
-	public Pipe selectedNextPipe = null;
+	private bool connectedWaypoints = false;
 
 	public void Start() {
 		NextPipes = new List<Pipe>();
-		AppendPipes();
 		Builder = gameObject.GetComponentInParent<TubeBuilder>();
-
-		if (NextPipes.Count > 0)
-			selectedNextPipe = NextPipes[0];
 	}
 
 	public void Update() {
-		if (!connectedWaypoints) {
-			if (Builder.Follower.LastDestionationIsNear()) {
-				if (selectedNextPipe != null) {
-					Debug.Log("Appending waypoints");
-					Builder.Follower.AppendWaypointContainer(selectedNextPipe.WaypointContainer);
+		// Check if the player has already started to enter this pipe.
+		if (!WaypointsConnected) {
+			// Are we near the end?
+			if (Builder.Follower.LastDestionationIsNear() &&
+					(NextPipes.Count > 0)) {
+				// Well, it's time for the player to choose its next path.
+				SelectNextPipe();
+				if (NextPipeSelected != null) {
+					// Append the waypoints for the next pipe to guide the player.
+					Builder.Follower.AppendWaypointContainer(
+						NextPipeSelected.WaypointContainer);
 				}
 
-				connectedWaypoints = true;
+				// Done connecting the dots.
+				WaypointsConnected = true;
+
+				// Free up the previous pipe as we are already far enough from it.
+				FreePreviousPipe();
+			}
+		}
+
+		// Append the next pipes only when appropriate.
+		if (NextPipes.Count == 0) {
+			// Check if we are at the middle of the pipe.
+			if (Vector3.Distance(PipesLoadingPoint.transform.position,
+					Builder.Follower.controlledCharacter.transform.position) <= 0.5f) {
+				AppendNextPipes();
 			}
 		}
 	}
@@ -42,23 +57,52 @@ public class Pipe : MonoBehaviour {
 	/// <summary>
 	/// Appends all available pipes to the module outputs.
 	/// </summary>
-	public void AppendPipes() {
-		if (!appe)
-			return;
-		// Middle connected pipe.
-		GameObject pipeObject = Instantiate((GameObject)Resources.Load("Prefabs/Test/VeinTest", //"Prefabs/Test/StraightPipeTest",
+	protected void AppendNextPipes() {
+		// Instantiate a new pipe connected to the middle connector.
+		GameObject pipeObject = Instantiate((GameObject)Resources.Load("Prefabs/Test/VeinTest",
 			typeof(GameObject)), MiddleConnection.transform.position,
 			MiddleConnection.transform.rotation, gameObject.transform.parent);
+		
+		// Add us as its previous pipe.
 		Pipe pipe = pipeObject.GetComponent<Pipe>();
 		pipe.PreviousPipe = this;
+
+		// Add it to our next pipes list and select it as our next pipe to go.
 		NextPipes.Add(pipe);
+	}
+
+	/// <summary>
+	/// Frees up the previous previous pipe if there is one there.
+	/// </summary>
+	protected void FreePreviousPipe() {
+		// Do we even have a previous pipe to nuke?
+		if (PreviousPipe == null)
+			return;
+
+		// Nuke the bastard.
+		PreviousPipe.Free(this);
+		PreviousPipe = null;
+	}
+
+	/// <summary>
+	/// Selects the next pipe the user wants to go through based on their
+	/// tilt factor.
+	/// </summary>
+	public void SelectNextPipe() {
+		// TODO: Tilt detection. :)
+		if (NextPipes.Count == 0)
+			Debug.LogWarning("For some reason we have no next pipes to select");
+
+		// Select the next pipe using XKCD's approach to random selections.
+		NextPipeSelected = NextPipes[0];
 	}
 
 	/// <summary>
 	/// Frees up any resources being used by the pipe and its associated
 	/// surroundings.
 	/// </summary>
-	public void Free() {
+	/// <param name="protectedPipe">Pipe to protect from the impending doom.</param>
+	public void Free(Pipe protectedPipe = null) {
 		// Destroy the previous pipe.
 		if (PreviousPipe != null)
 			PreviousPipe.Free();
@@ -69,19 +113,16 @@ public class Pipe : MonoBehaviour {
 			if (pipe == null)
 				continue;
 
-			if (!pipe.InUse)
-				pipe.Free();
+			// Protect a pipe.
+			if (pipe == protectedPipe)
+				continue;
+
+			// Free it up.
+			pipe.Free();
 		}
 
 		// Destroy ourself.
 		Destroy(gameObject);
-	}
-
-	/// <summary>
-	/// Checks if the pipe is currently in use.
-	/// </summary>
-	public bool InUse {
-		get { return false; }
 	}
 
 	/// <summary>
@@ -109,6 +150,15 @@ public class Pipe : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Next pipe selected by the player to go through and have its waypoints
+	/// connected.
+	/// </summary>
+	public Pipe NextPipeSelected {
+		get { return nextPipeSelected; }
+		set { nextPipeSelected = value; }
+	}
+
+	/// <summary>
 	/// Path builder parent object.
 	/// </summary>
 	public TubeBuilder Builder {
@@ -117,10 +167,27 @@ public class Pipe : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Point where we are free to append pipes to the current pipe.
+	/// </summary>
+	public GameObject PipesLoadingPoint {
+		get { return pipesLoadingPoint; }
+		set { pipesLoadingPoint = value; }
+	}
+
+	/// <summary>
 	/// Pipe's internal waypoint container for the player's path.
 	/// </summary>
 	public GameObject WaypointContainer {
 		get { return waypointContainer; }
 		set { waypointContainer = value; }
+	}
+
+	/// <summary>
+	/// Have we already connected the waypoints from this pipe to the next one
+	/// that was selected by the user?
+	/// </summary>
+	public bool WaypointsConnected {
+		get { return connectedWaypoints; }
+		set { connectedWaypoints = value; }
 	}
 }
