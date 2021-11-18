@@ -20,7 +20,14 @@ public class BezierCurve : List<Vector3> {
 		Add(p2);
 	}
 
-	public static List<Vector3> SampleCurveWithPoints(List<Vector3> points) {
+	/// <summary>
+	/// Samples a bezier curve from a list of points.
+	/// </summary>
+	/// <param name="points">List of points to use to create the curve.</param>
+	/// <param name="samples">Number of samples to take for each section of the curve.</param>
+	/// <returns>List of sampled points forming a nice bezier curve.</returns>
+	public static List<Vector3> SampleCurveWithPoints(List<Vector3> points,
+			int samples = 20) {
 		List<Vector3> bezierPoints = new List<Vector3>();
 
 		// Go through the points list sampling a nice smooth curve.
@@ -28,9 +35,9 @@ public class BezierCurve : List<Vector3> {
 			// Build Bezier curve.
 			BezierCurve bezier = new BezierCurve(points[0], points[1], points[2]);
 
-			// TODO: Allow the function to set the sample resolution/number of samples.
 			// Sample the curve.
-			for (float i = 0.0f; i < 1.01f; i += 0.1f) {
+			for (float i = 0.0f; i < (1f + (0.5f / samples)); i += (1 / samples)) {
+				// Aren't floats beautiful?
 				if (i > 1.0f)
 					i = 1.0f;
 
