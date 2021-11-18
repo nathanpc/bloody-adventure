@@ -8,25 +8,35 @@ using UnityEngine.AI;
 /// the player.
 /// </summary>
 public class Pipe : MonoBehaviour {
-	[SerializeField]
-	private List<Pipe> nextPipes = null;
-	[SerializeField]
-	private Pipe previousPipe = null;
-	[SerializeField]
-	private GameObject middleConnection = null;
-	[SerializeField]
-	private GameObject waypointContainer = null;
+	[SerializeField] private List<Pipe> nextPipes = null;
+	[SerializeField] private Pipe previousPipe = null;
+	[SerializeField] private GameObject middleConnection = null;
+	[SerializeField] private GameObject waypointContainer = null;
 	private TubeBuilder builder = null;
 	public bool appe = false;
+	public bool connectedWaypoints = false;
+	public Pipe selectedNextPipe = null;
 
 	public void Start() {
 		NextPipes = new List<Pipe>();
 		AppendPipes();
 		Builder = gameObject.GetComponentInParent<TubeBuilder>();
+
+		if (NextPipes.Count > 0)
+			selectedNextPipe = NextPipes[0];
 	}
 
 	public void Update() {
-		
+		if (!connectedWaypoints) {
+			if (Builder.Follower.LastDestionationIsNear()) {
+				if (selectedNextPipe != null) {
+					Debug.Log("Appending waypoints");
+					Builder.Follower.AppendWaypointContainer(selectedNextPipe.WaypointContainer);
+				}
+
+				connectedWaypoints = true;
+			}
+		}
 	}
 
 	/// <summary>
@@ -36,13 +46,12 @@ public class Pipe : MonoBehaviour {
 		if (!appe)
 			return;
 		// Middle connected pipe.
-		GameObject pipeObject = Instantiate((GameObject)Resources.Load("Prefabs/Test/StraightPipeTest",
+		GameObject pipeObject = Instantiate((GameObject)Resources.Load("Prefabs/Test/VeinTest", //"Prefabs/Test/StraightPipeTest",
 			typeof(GameObject)), MiddleConnection.transform.position,
-			MiddleConnection.transform.rotation);
-		pipeObject.transform.parent = gameObject.transform.parent;
+			MiddleConnection.transform.rotation, gameObject.transform.parent);
 		Pipe pipe = pipeObject.GetComponent<Pipe>();
-		pipe.previousPipe = this;
-		nextPipes.Add(pipe);
+		pipe.PreviousPipe = this;
+		NextPipes.Add(pipe);
 	}
 
 	/// <summary>
@@ -51,8 +60,8 @@ public class Pipe : MonoBehaviour {
 	/// </summary>
 	public void Free() {
 		// Destroy the previous pipe.
-		if (previousPipe != null)
-			previousPipe.Free();
+		if (PreviousPipe != null)
+			PreviousPipe.Free();
 
 		// Destroy next pipes that aren't currently in use.
 		foreach (Pipe pipe in NextPipes) {

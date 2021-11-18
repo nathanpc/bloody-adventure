@@ -8,14 +8,12 @@ using UnityEngine;
 /// </summary>
 public class PathFollower : MonoBehaviour {
 	public GameObject controlledCharacter = null;
-	public GameObject waypointContainer = null;
 	public float movementSpeed = 2.0f;
 	public float rotationSpeed = 1.0f;
-	public bool autoStart = false;
 	public bool ignoreRotation = false;
 	public bool showDebug = false;
 	private Transform tCharacter;
-	private List<Vector3> targets;
+	public List<Vector3> targets;
 	private Vector3 characterForward;
 
 	// Start is called before the first frame update
@@ -26,15 +24,6 @@ public class PathFollower : MonoBehaviour {
 			controlledCharacter = this.gameObject;
 		tCharacter = controlledCharacter.transform;
 		characterForward = tCharacter.forward;
-
-		// Auto start the path following?
-		if (autoStart) {
-			// Do we even have a waypoint container.
-			if (waypointContainer == null)
-				return;
-
-			SetWaypointContainer(waypointContainer);
-		}
 	}
 
 	// Update is called once per frame
@@ -65,6 +54,7 @@ public class PathFollower : MonoBehaviour {
 		DrawBezierPathLines(Color.yellow);
 	}
 
+	/*
 	/// <summary>
 	/// Gets waypoints transforms from a given container <see cref="GameObject"/>.
 	/// </summary>
@@ -75,8 +65,8 @@ public class PathFollower : MonoBehaviour {
 
 		// Shallow copy the list.
 		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>()) {
-			// Ignore ourself.
-			if (transform.gameObject == waypointContainer)
+			// Ignore containers.
+			if (transform.gameObject.tag == "Container")
 				continue;
 
 			transforms.Add(transform);
@@ -84,6 +74,7 @@ public class PathFollower : MonoBehaviour {
 
 		return transforms;
 	}
+	*/
 
 	/// <summary>
 	/// Gets waypoints positions from a given container <see cref="GameObject"/>.
@@ -95,8 +86,8 @@ public class PathFollower : MonoBehaviour {
 
 		// Shallow copy the list.
 		foreach (Transform transform in waypointsParent.GetComponentsInChildren<Transform>()) {
-			// Ignore ourself.
-			if (transform.gameObject == waypointContainer)
+			// Ignore containers.
+			if (transform.gameObject.tag == "Container")
 				continue;
 
 			positions.Add(transform.position);
@@ -110,8 +101,21 @@ public class PathFollower : MonoBehaviour {
 	/// </summary>
 	/// <param name="waypointsParent">Container of waypoints.</param>
 	public void SetWaypointContainer(GameObject waypointsParent) {
-		targets.AddRange(BezierCurve.SampleCurveWithPoints(
-			GetWaypointsPositions(waypointsParent)));
+		List<Vector3> positions = GetWaypointsPositions(waypointsParent);
+		List<Vector3> bezierPoints = BezierCurve.SampleCurveWithPoints(positions);
+
+		targets.AddRange(bezierPoints);
+	}
+
+	/// <summary>
+	/// Appends a new waypoints container <see cref="GameObject"/> to the
+	/// current waypoint list.
+	/// </summary>
+	/// <param name="waypointsParent">Container of waypoints to be appended.</param>
+	public void AppendWaypointContainer(GameObject waypointsParent) {
+		// Yeah, it's just an alias for now. When I have time I'll clean this
+		// horrible crap up.
+		SetWaypointContainer(waypointsParent);
 	}
 
 	/// <summary>
@@ -133,17 +137,6 @@ public class PathFollower : MonoBehaviour {
 			Vector3 newDirection = Vector3.RotateTowards(tCharacter.forward,
 				targets[0] - tCharacter.position, rotationStep, 0.0f);
 			tCharacter.rotation = Quaternion.LookRotation(newDirection);
-			/*
-			// Use waypoint rotation?
-			//if (useWaypointRotation) {
-				//tCharacter.rotation = Quaternion.Lerp(tCharacter.rotation, targets[0].rotation, rotationStep);
-			//} else {
-				// Rotate towards the next waypoint.
-				Vector3 direction = targets[0] - tCharacter.position;
-				Quaternion toRotation = Quaternion.FromToRotation(characterForward, direction);
-				tCharacter.rotation = Quaternion.RotateTowards(tCharacter.rotation, toRotation, 10);
-			//}
-			*/
 		}
 	}
 
@@ -216,6 +209,22 @@ public class PathFollower : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Checks if the target character is near its final destination.
+	/// </summary>
+	/// <param name="closeEnoughDistance">What distance do we think is near
+	/// enough.</param>
+	/// <returns><code>True</code> if the character is near its final
+	/// destination.</returns>
+	public bool LastDestionationIsNear(float closeEnoughDistance = 0.15f) {
+		// If the next target is not the last one, then we have nothing to do.
+		if (targets.Count != 1)
+			return false;
+
+		return Vector3.Distance(tCharacter.position, targets[0])
+			< closeEnoughDistance;
+	}
+
+	/// <summary>
 	/// Gets the <see cref="GameObject"/> of the character that this path follower is controlling.
 	/// </summary>
 	/// <returns><see cref="GameObject"/> of the character.</returns>
@@ -227,28 +236,14 @@ public class PathFollower : MonoBehaviour {
 	/// Draws Bezier debug lines for positioning waypoints.
 	/// </summary>
 	public void DrawBezierPathLines(Color gizmoColor) {
-		List<Vector3> points = BezierCurve.SampleCurveWithPoints(
-			UnityManipulator.ListTransformsPosition(GetWaypointsTransforms(waypointContainer)));
+		if (targets.Count == 0)
+			return;
+
 		Gizmos.color = gizmoColor;
-
-		for (int i = 1; i < points.Count; i++) {
-			Gizmos.DrawLine(points[i - 1], points[i]);
-		}
-	}
-
-	/// <summary>
-	/// Draws straight debug lines for positioning waypoints.
-	/// </summary>
-	public void DrawStraightPathLines(Color gizmoColor) {
-		// Go through GameObject childs.
-		Vector3 startPos = controlledCharacter.transform.position;
-		foreach (Transform transform in GetWaypointsTransforms(waypointContainer)) {
-			// Show a nice line between the waypoints.
-			Gizmos.color = gizmoColor;
-			Gizmos.DrawLine(startPos, transform.position);
-			Gizmos.DrawWireSphere(transform.position, 0.1f);
-
-			startPos = transform.position;
+		Gizmos.DrawSphere(targets[0], 0.1f);
+		for (int i = 1; i < targets.Count; i++) {
+			Gizmos.DrawLine(targets[i - 1], targets[i]);
+			Gizmos.DrawSphere(targets[i], 0.1f);
 		}
 	}
 }
