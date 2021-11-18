@@ -59,7 +59,7 @@ public class Pipe : MonoBehaviour {
 	/// </summary>
 	protected void AppendNextPipes() {
 		// Instantiate a new pipe connected to the middle connector.
-		GameObject pipeObject = Instantiate((GameObject)Resources.Load("Prefabs/Test/VeinTest",
+		GameObject pipeObject = Instantiate((GameObject)Resources.Load("Prefabs/Veins/Straight 1",
 			typeof(GameObject)), MiddleConnection.transform.position,
 			MiddleConnection.transform.rotation, gameObject.transform.parent);
 		

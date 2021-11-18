@@ -12,11 +12,11 @@ public class PathFollower : MonoBehaviour {
 	public float rotationSpeed = 1.0f;
 	public bool ignoreRotation = false;
 	public bool showDebug = false;
+	public int bezierCurveSamples = 20;
 	private Transform tCharacter;
 	public List<Vector3> targets;
 	private Vector3 characterForward;
 
-	// Start is called before the first frame update
 	private void Start() {
 		// Initialize some properties.
 		targets = new List<Vector3>();
@@ -26,8 +26,7 @@ public class PathFollower : MonoBehaviour {
 		characterForward = tCharacter.forward;
 	}
 
-	// Update is called once per frame
-	private void Update() {
+	private void FixedUpdate() {
 		// Check if we have reached our final destination.
 		if (IsAtFinalDestination()) {
 			if (showDebug)
@@ -102,7 +101,8 @@ public class PathFollower : MonoBehaviour {
 	/// <param name="waypointsParent">Container of waypoints.</param>
 	public void SetWaypointContainer(GameObject waypointsParent) {
 		List<Vector3> positions = GetWaypointsPositions(waypointsParent);
-		List<Vector3> bezierPoints = BezierCurve.SampleCurveWithPoints(positions);
+		List<Vector3> bezierPoints =
+			BezierCurve.SampleCurveWithPoints(positions, bezierCurveSamples);
 
 		targets.AddRange(bezierPoints);
 	}

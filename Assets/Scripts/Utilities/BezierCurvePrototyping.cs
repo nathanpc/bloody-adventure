@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A helper class to make bezier curve prototyping in containers a lot easier.
+/// </summary>
 public class BezierCurvePrototyping : MonoBehaviour {
 	public int samplePoints = 10;
 	public bool showLines = true;
