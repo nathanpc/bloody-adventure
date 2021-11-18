@@ -36,7 +36,7 @@ public class BezierCurve : List<Vector3> {
 			BezierCurve bezier = new BezierCurve(points[0], points[1], points[2]);
 
 			// Sample the curve.
-			for (float i = 0.0f; i < (1f + (0.5f / samples)); i += (1 / samples)) {
+			for (float i = 0.0f; i < (1f + (0.5f / samples)); i += (1f / samples)) {
 				// Aren't floats beautiful?
 				if (i > 1.0f)
 					i = 1.0f;
