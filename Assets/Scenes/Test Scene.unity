@@ -536,6 +536,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPipe: {fileID: 509492619}
   follower: {fileID: 1629919440}
+  pipePrefabs:
+  - {fileID: 514092273563143144, guid: 568f8ae005e930c40b7bc306008f37cb, type: 3}
 --- !u!1001 &514092273468651107
 PrefabInstance:
   m_ObjectHideFlags: 0

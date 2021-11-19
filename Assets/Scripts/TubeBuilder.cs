@@ -7,21 +7,28 @@ using UnityEngine;
 /// player will be inside of.
 /// </summary>
 public class TubeBuilder : MonoBehaviour {
+	[SerializeField] private GameObject currentPipe = null;
+	[SerializeField] private PathFollower follower = null;
+	[SerializeField] private List<GameObject> pipePrefabs = null;
 	private GameObject pipeContainer = null;
-	[SerializeField]
-	private GameObject currentPipe = null;
-	[SerializeField]
-	private PathFollower follower = null;
 
 	// Start is called before the first frame update
 	void Start() {
 		Container = gameObject;
-		Follower.SetWaypointContainer(currentPipe.GetComponent<Pipe>().WaypointContainer);
+		if (Prefabs == null)
+			Prefabs = new List<GameObject>();
+
+		// Starts entering the first pipe.
+		Follower.SetWaypointContainer(
+			currentPipe.GetComponent<Pipe>().WaypointContainer);
 	}
 
-	// Update is called once per frame
-	void Update() {
-
+	/// <summary>
+	/// Get a random pipe from the prefabs list.
+	/// </summary>
+	/// <returns>Random pipe to continue the user's journey.</returns>
+	public GameObject GetNextPipe() {
+		return Prefabs[Random.Range(0, Prefabs.Count)];
 	}
 
 	/// <summary>
@@ -46,5 +53,13 @@ public class TubeBuilder : MonoBehaviour {
 	public PathFollower Follower {
 		get { return follower; }
 		set { follower = value; }
+	}
+
+	/// <summary>
+	/// Pipe prefabs to build the veins with.
+	/// </summary>
+	public List<GameObject> Prefabs {
+		get { return pipePrefabs; }
+		set { pipePrefabs = value; }
 	}
 }
