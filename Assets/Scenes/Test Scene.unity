@@ -5387,7 +5387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerModel: {fileID: 505445398}
   _leanSpeed: 1
-  _rotationSpeed: 1
+  _rotationSpeed: 4
   currentAction: {fileID: 995902012}
 --- !u!114 &995902012
 MonoBehaviour:

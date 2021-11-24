@@ -19,6 +19,10 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 
 	// Update is called once per frame
 	void Update() {
+		// Are we done yet?
+		if (Escape())
+			GameControl.Quit();
+
 		// Lean in X and Y. Ignore Z because we are not in VR.
 		Vector3 lean = new Vector3(HorizontalLean(), VerticalMovement(), 0);
 		transform.Translate(lean * LeanSpeed * Time.deltaTime);
@@ -50,6 +54,10 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 
 	public bool MainFire() {
 		return Input.GetButton("Fire1");
+	}
+
+	public bool Escape() {
+		return Input.GetButtonDown("Cancel");
 	}
 
 	/// <summary>

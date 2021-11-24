@@ -36,4 +36,10 @@ public interface IPlayerController {
 	/// </summary>
 	/// <returns>True if the main "fire" button has been pressed.</returns>
 	public bool MainFire();
+
+	/// <summary>
+	/// Well, are we done yet?
+	/// </summary>
+	/// <returns>True if we are done with this shit.</returns>
+	public bool Escape();
 }
