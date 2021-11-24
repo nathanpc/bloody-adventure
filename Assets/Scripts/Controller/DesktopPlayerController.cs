@@ -10,6 +10,7 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 	[SerializeField] private GameObject _playerModel;
 	[SerializeField] private float _leanSpeed = 1.0f;
 	[SerializeField] private float _rotationSpeed = 1.0f;
+	public ActionBase currentAction = null;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -25,6 +26,10 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 		// Rotate the player around.
 		transform.Rotate(0, HorizontalRotation() * RotationSpeed, 0);
 		transform.Rotate(-VerticalRotation() * RotationSpeed, 0, 0);
+
+		// Fire?
+		if (MainFire())
+			currentAction.ExecuteAction();
 	}
 
 	public float HorizontalLean() {
@@ -41,6 +46,10 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 
 	public float VerticalRotation() {
 		return Input.GetAxis("Mouse Y");
+	}
+
+	public bool MainFire() {
+		return Input.GetButton("Fire1");
 	}
 
 	/// <summary>

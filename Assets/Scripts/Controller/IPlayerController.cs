@@ -30,4 +30,10 @@ public interface IPlayerController {
 	/// </summary>
 	/// <returns>Vertical rotation magnitude from -1.0 to +1.0.</returns>
 	public float VerticalRotation();
+
+	/// <summary>
+	/// Has the main "fire" button been pressed?
+	/// </summary>
+	/// <returns>True if the main "fire" button has been pressed.</returns>
+	public bool MainFire();
 }
