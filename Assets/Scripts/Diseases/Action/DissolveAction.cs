@@ -23,12 +23,11 @@ public class DissolveAction : ActionBase {
 
 		// Raycast and check if we actually have hit some cholesterol.
 		if (DoCameraRaycast(out hit)) {
-			Debug.Log(hit.transform.tag + " " + hit.transform.gameObject.name);
+			// Check if we can actually dissolve the item that was hit.
 			if (hit.transform.tag == DissolvableObjectTag) {
 				DiseaseBehaviour diseaseBehaviour =
 					hit.transform.gameObject.GetComponent<DiseaseBehaviour>();
-				
-				Debug.Log("FUKING HIT!");
+
 				diseaseBehaviour.TakeHit();
 			}
 		}
