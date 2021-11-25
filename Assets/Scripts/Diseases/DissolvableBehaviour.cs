@@ -13,9 +13,9 @@ public class DissolvableBehaviour : DiseaseBehaviour {
 		OriginalScale = transform.localScale.x;
 	}
 
-	public override void TakeHit() {
+	public override void TakeHit(int amount) {
 		// Let's take a hit first.
-		base.TakeHit();
+		base.TakeHit(amount);
 
 		// Die?
 		if (IsSupposedDead()) {

@@ -6,6 +6,7 @@ using UnityEngine;
 /// Action script for the cholesterol dissolver spray.
 /// </summary>
 public class DissolveAction : ActionBase {
+	public int damageAmount = 1;
 	[SerializeField] private string _dissolvableObjectTag;
 
 	// Start is called before the first frame update
@@ -28,7 +29,7 @@ public class DissolveAction : ActionBase {
 				DiseaseBehaviour diseaseBehaviour =
 					hit.transform.gameObject.GetComponent<DiseaseBehaviour>();
 
-				diseaseBehaviour.TakeHit();
+				diseaseBehaviour.TakeHit(damageAmount);
 			}
 		}
 	}

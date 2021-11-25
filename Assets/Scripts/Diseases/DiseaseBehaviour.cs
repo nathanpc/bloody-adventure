@@ -11,8 +11,9 @@ public abstract class DiseaseBehaviour : MonoBehaviour {
 	/// <summary>
 	/// Inflicts damage to the object.
 	/// </summary>
-	public virtual void TakeHit() {
-		HitPoints--;
+	/// <param name="amount">Amount of damage to take.</param>
+	public virtual void TakeHit(int amount) {
+		HitPoints -= amount;
 	}
 
 	/// <summary>
