@@ -6,12 +6,16 @@ using UnityEngine;
 /// Action script for the cholesterol dissolver spray.
 /// </summary>
 public class DissolveAction : ActionBase {
-	public int damageAmount = 1;
+	[SerializeField] private GameObject _sprayer;
+	[SerializeField] private int _damageAmount = 1;
 	[SerializeField] private string _dissolvableObjectTag;
+	private ParticleSystem particles;
 
 	// Start is called before the first frame update
 	void Start() {
-
+		// Get the pretty particles!
+		if (Sprayer != null)
+			particles = Sprayer.GetComponent<ParticleSystem>();
 	}
 
 	// Update is called once per frame
@@ -22,6 +26,9 @@ public class DissolveAction : ActionBase {
 	public override void ExecuteAction() {
 		RaycastHit hit;
 
+		// Show a nice spray!
+		particles.Play();
+
 		// Raycast and check if we actually have hit some cholesterol.
 		if (DoCameraRaycast(out hit)) {
 			// Check if we can actually dissolve the item that was hit.
@@ -29,9 +36,25 @@ public class DissolveAction : ActionBase {
 				DiseaseBehaviour diseaseBehaviour =
 					hit.transform.gameObject.GetComponent<DiseaseBehaviour>();
 
-				diseaseBehaviour.TakeHit(damageAmount);
+				diseaseBehaviour.TakeHit(DamageAmount);
 			}
 		}
+	}
+
+	/// <summary>
+	/// Sprayer object.
+	/// </summary>
+	public GameObject Sprayer {
+		get { return _sprayer; }
+		set { _sprayer = value; }
+	}
+
+	/// <summary>
+	/// Amount of damage to inflict.
+	/// </summary>
+	public int DamageAmount {
+		get { return _damageAmount; }
+		set { _damageAmount = value; }
 	}
 
 	/// <summary>
