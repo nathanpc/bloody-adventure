@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cholesterol
+  m_Name: Virus
   m_Shader: {fileID: 4800000, guid: 81ae609a37b59f043ac4256abae11b2e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -80,9 +80,9 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.6943355, b: 0, a: 1}
+    - _Color: {r: 0.0795902, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.6}
-    - _SColor: {r: 0.5283019, g: 0.28423095, b: 0.052687775, a: 1}
+    - _HColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
+    - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.73333335}
+    - _SColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
