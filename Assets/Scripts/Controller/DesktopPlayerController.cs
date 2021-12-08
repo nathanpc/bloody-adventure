@@ -12,11 +12,6 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 	[SerializeField] private float _rotationSpeed = 1.0f;
 	public ActionBase currentAction = null;
 
-	// Start is called before the first frame update
-	void Start() {
-
-	}
-
 	// Update is called once per frame
 	void Update() {
 		// Are we done yet?

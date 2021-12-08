@@ -13,11 +13,6 @@ public class MobilePlayerController : MonoBehaviour, IPlayerController {
 	private Vector3 touchStartPosition;
 	private float touchSpeedCompensation = 0.005f;
 
-	// Start is called before the first frame update
-	void Start() {
-
-	}
-
 	// Update is called once per frame
 	void Update() {
 		// Are we done yet?
@@ -85,6 +80,8 @@ public class MobilePlayerController : MonoBehaviour, IPlayerController {
 	}
 
 	public bool MainFire() {
+		return Input.touchCount > 1;
+		/*
 		// Check if we are already controlling the camera.
 		if (Input.touchCount > 1) {
 			// Get the raycast of the touch.
@@ -107,6 +104,7 @@ public class MobilePlayerController : MonoBehaviour, IPlayerController {
 		}
 
 		return false;
+		*/
 	}
 
 	public bool Escape() {
