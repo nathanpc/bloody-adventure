@@ -9,7 +9,12 @@ using UnityEngine;
 public class PlatformConfigurator : MonoBehaviour {
 	[Header("Controller")]
 	public DesktopPlayerController desktopController;
+	public VRPlayerController vrController;
 	public MobilePlayerController mobileController;
+	public bool usingVR = false;
+	[Header("Camera")]
+	public GameObject regularCamera;
+	public GameObject vrCameraRig;
 	[Header("Effects")]
 	public List<GameObject> fog;
 
@@ -25,6 +30,9 @@ public class PlatformConfigurator : MonoBehaviour {
 		case RuntimePlatform.WindowsEditor:
 		case RuntimePlatform.WindowsPlayer:
 			SetupForDesktop();
+			if (usingVR)
+				SetupVirtualReality();
+
 			break;
 		// Mobile
 		case RuntimePlatform.IPhonePlayer:
@@ -42,6 +50,10 @@ public class PlatformConfigurator : MonoBehaviour {
 	/// Sets up everything to run on a desktop.
 	/// </summary>
 	public void SetupForDesktop() {
+		// Camera
+		regularCamera.SetActive(true);
+		vrCameraRig.SetActive(false);
+
 		// Controller.
 		mobileController.enabled = false;
 		desktopController.enabled = true;
@@ -51,9 +63,30 @@ public class PlatformConfigurator : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Sets up everything for VR. You must first setup the actual platform
+	/// like desktop or mobile before calling this.
+	/// </summary>
+	public void SetupVirtualReality() {
+		// Camera
+		regularCamera.SetActive(false);
+		vrCameraRig.SetActive(true);
+
+		// Controller.
+		desktopController.enabled = false;
+		vrController.enabled = true;
+
+		// Effects.
+		ChangeFogState(true);
+	}
+
+	/// <summary>
 	/// Sets up everything to run on a mobile device.
 	/// </summary>
 	public void SetupForMobile() {
+		// Camera
+		regularCamera.SetActive(true);
+		vrCameraRig.SetActive(false);
+
 		// Controller.
 		desktopController.enabled = false;
 		mobileController.enabled = true;
