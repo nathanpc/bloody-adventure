@@ -47,7 +47,7 @@ public class VRPlayerController : MonoBehaviour, IPlayerController {
 	}
 
 	public bool MainFire() {
-		return Input.GetButton("Fire1");
+		return Input.GetAxis("Trigger") >= 0.99f;
 	}
 
 	public bool Escape() {
