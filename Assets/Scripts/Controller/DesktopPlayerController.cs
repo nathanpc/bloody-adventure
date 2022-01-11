@@ -10,7 +10,12 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 	[SerializeField] private GameObject _playerModel;
 	[SerializeField] private float _leanSpeed = 1.0f;
 	[SerializeField] private float _rotationSpeed = 1.0f;
-	public ActionBase currentAction = null;
+	public ActionBase[] dissolveAction;
+	private ActionBase _currentAction = null;
+
+	void Start() {
+		CurrentAction = dissolveAction[0];
+	}
 
 	// Update is called once per frame
 	void Update() {
@@ -28,7 +33,7 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 
 		// Fire?
 		if (MainFire())
-			currentAction.ExecuteAction();
+			CurrentAction.ExecuteAction();
 	}
 
 	public float HorizontalLean() {
@@ -61,6 +66,14 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 	public GameObject PlayerModel {
 		get { return _playerModel; }
 		set { _playerModel = value; }
+	}
+
+	/// <summary>
+	/// Current action of the player.
+	/// </summary>
+	public ActionBase CurrentAction {
+		get { return _currentAction; }
+		set { _currentAction = value; }
 	}
 
 	/// <summary>
