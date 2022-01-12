@@ -15,17 +15,17 @@ public class DissolvableBehaviour : DiseaseBehaviour {
 	}
 
 	public override void TakeHit(int amount) {
-
 		// Let's take a hit first.
 		base.TakeHit(amount);
 
 		// Make sure we don't end up with a tiny 1HP point.
-		if (HitPoints < 5)
-			base.TakeHit(5);
+		base.TakeHit(5);
+		if (HitPoints < 15)
+			base.TakeHit(15);
 
 		// Die?
 		if (IsSupposedDead())
-			StartCoroutine(WaitToDie());
+		StartCoroutine(WaitToDie());
 
 		// Scale the model according to our hit count.
 		float scale = OriginalScale * ((float)HitPoints / 100);
@@ -33,8 +33,6 @@ public class DissolvableBehaviour : DiseaseBehaviour {
 
 		// Show pretty particles.
 		Particles.Play();
-
-		Debug.Log(HitPoints);
 	}
 
 	/// <summary>

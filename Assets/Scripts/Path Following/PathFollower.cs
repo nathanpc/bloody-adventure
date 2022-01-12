@@ -215,7 +215,7 @@ public class PathFollower : MonoBehaviour {
 	/// enough.</param>
 	/// <returns><code>True</code> if the character is near its final
 	/// destination.</returns>
-	public bool LastDestionationIsNear(float closeEnoughDistance = 0.5f) {
+	public bool LastDestionationIsNear(float closeEnoughDistance = 5f) {
 		// If the next target is not the last one, then we have nothing to do.
 		if (targets.Count != 1)
 			return false;
