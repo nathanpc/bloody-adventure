@@ -7198,6 +7198,9 @@ MonoBehaviour:
   pipePrefabs:
   - {fileID: 8720787444102145205, guid: f254b4a389244dc4297f84aad47657ad, type: 3}
   - {fileID: 8952913478965246362, guid: 365207bd2896dfd49814ca62d9f08f3e, type: 3}
+  - {fileID: 514092273563143144, guid: 568f8ae005e930c40b7bc306008f37cb, type: 3}
+  - {fileID: 8606542850546383034, guid: 921ff31f898fde04b8d2a72887e9077e, type: 3}
+  - {fileID: 441076413393527132, guid: 737488c370d810342bcdc43a3f21829c, type: 3}
 --- !u!1001 &4239400730129088965
 PrefabInstance:
   m_ObjectHideFlags: 0
