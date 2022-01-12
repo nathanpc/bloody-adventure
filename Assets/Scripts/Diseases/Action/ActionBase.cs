@@ -14,6 +14,12 @@ public abstract class ActionBase : MonoBehaviour {
 	public abstract void ExecuteAction();
 
 	/// <summary>
+	/// Ran when the user stops executing an action.
+	/// </summary>
+	public virtual void StopAction() {
+	}
+
+	/// <summary>
 	/// Performs a raycast from the center of the camera.
 	/// </summary>
 	/// <param name="hit">If true is returned, this will contain the hit

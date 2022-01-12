@@ -31,8 +31,11 @@ public class VRPlayerController : MonoBehaviour, IPlayerController {
 		transform.Rotate(-VerticalRotation() * RotationSpeed, 0, 0);
 
 		// Fire?
-		if (MainFire())
+		if (MainFire()) {
 			CurrentAction.ExecuteAction();
+		} else {
+			CurrentAction.StopAction();
+		}
 	}
 
 	public float HorizontalLean() {

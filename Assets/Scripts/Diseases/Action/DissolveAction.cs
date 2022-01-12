@@ -9,21 +9,24 @@ public class DissolveAction : ActionBase {
 	[SerializeField] private int _damageAmount = 1;
 	[SerializeField] private string _dissolvableObjectTag;
 	[SerializeField] private ParticleSystem _particles;
+	public GameObject trigger;
 	private GameObject _sprayer;
+	private bool triggered = false;
 
 	// Start is called before the first frame update
 	void Start() {
-		// Get the sprayer and its pretty particles!
+		// Get the sprayer!
 		Sprayer = gameObject;
-	}
-
-	// Update is called once per frame
-	void Update() {
-
 	}
 
 	public override void ExecuteAction() {
 		RaycastHit hit;
+
+		// Pull the trigger.
+		if (!triggered) {
+			trigger.transform.localRotation = Quaternion.Euler(0, 0, -32);
+			triggered = true;
+		}
 
 		// Show a nice spray!
 		SprayParticles.Play();
@@ -35,9 +38,18 @@ public class DissolveAction : ActionBase {
 				DiseaseBehaviour diseaseBehaviour =
 					hit.transform.gameObject.GetComponent<DiseaseBehaviour>();
 
+				// Take a hit at the thing.
 				diseaseBehaviour.TakeHit(DamageAmount);
 			}
 		}
+	}
+
+	public override void StopAction() {
+		// Depress the trigger.
+		if (triggered)
+			trigger.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+		triggered = false;
 	}
 
 	/// <summary>
