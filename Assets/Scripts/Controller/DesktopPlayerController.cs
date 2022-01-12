@@ -15,6 +15,9 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 
 	void Start() {
 		CurrentAction = dissolveAction[0];
+
+		dissolveAction[1].parentObject.SetActive(false);
+		CurrentAction.parentObject.SetActive(true);
 	}
 
 	// Update is called once per frame
@@ -37,6 +40,21 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 		} else {
 			CurrentAction.StopAction();
 		}
+
+		// Switch weapon?
+		if (SwitchTool()) {
+			int i = 0;
+
+			if (CurrentAction == dissolveAction[0]) {
+				dissolveAction[0].parentObject.SetActive(false);
+				i = 1;
+			} else {
+				dissolveAction[1].parentObject.SetActive(false);
+			}
+
+			CurrentAction = dissolveAction[i];
+			dissolveAction[i].parentObject.SetActive(true);
+		}
 	}
 
 	public float HorizontalLean() {
@@ -53,6 +71,10 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 
 	public float VerticalRotation() {
 		return Input.GetAxis("Mouse Y");
+	}
+
+	public bool SwitchTool() {
+		return Input.GetButton("Switch Tool");
 	}
 
 	public bool MainFire() {

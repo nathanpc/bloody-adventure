@@ -32,6 +32,12 @@ public interface IPlayerController {
 	public float VerticalRotation();
 
 	/// <summary>
+	/// Switches to another tool.
+	/// </summary>
+	/// <returns>True when the user wants to switich tools.</returns>
+	public bool SwitchTool();
+
+	/// <summary>
 	/// Has the main "fire" button been pressed?
 	/// </summary>
 	/// <returns>True if the main "fire" button has been pressed.</returns>

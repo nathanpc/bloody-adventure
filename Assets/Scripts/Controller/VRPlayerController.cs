@@ -54,6 +54,10 @@ public class VRPlayerController : MonoBehaviour, IPlayerController {
 		return Input.GetAxis("Mouse Y");
 	}
 
+	public bool SwitchTool() {
+		return Input.GetButton("Switch Tool");
+	}
+
 	public bool MainFire() {
 		return Input.GetAxis("Trigger") >= 0.99f;
 	}

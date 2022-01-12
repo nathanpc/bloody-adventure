@@ -79,6 +79,10 @@ public class MobilePlayerController : MonoBehaviour, IPlayerController {
 		return 0f;
 	}
 
+	public bool SwitchTool() {
+		return false;
+	}
+
 	public bool MainFire() {
 		return Input.touchCount > 1;
 		/*

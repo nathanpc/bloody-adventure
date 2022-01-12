@@ -6,6 +6,7 @@ using UnityEngine;
 /// Player action abstraction interface.
 /// </summary>
 public abstract class ActionBase : MonoBehaviour {
+	public GameObject parentObject;
 	[SerializeField] private float _maxDistance = 1.0f;
 
 	/// <summary>
