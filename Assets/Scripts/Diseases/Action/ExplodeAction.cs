@@ -28,9 +28,12 @@ public class ExplodeAction : ActionBase {
 		WhiteCellTrigger cellTrigger = rigidCell.GetComponentInChildren<WhiteCellTrigger>();
 		cellTrigger.action = this;
 
+		Vector3 direction = Vector3.right;
+		direction = instantiateInPlace.transform.forward;
+
 		// Throw the cell!
 		rigidCell.GetComponentInChildren<Rigidbody>().AddRelativeForce(
-			Vector3.forward * throwForce, ForceMode.Impulse);
+			direction * throwForce, ForceMode.Impulse);
 	}
 
 	public override void StopAction() {

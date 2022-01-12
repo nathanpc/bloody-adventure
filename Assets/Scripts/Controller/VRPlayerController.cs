@@ -14,6 +14,9 @@ public class VRPlayerController : MonoBehaviour, IPlayerController {
 
 	void Start() {
 		CurrentAction = dissolveAction[0];
+
+		dissolveAction[1].parentObject.SetActive(false);
+		CurrentAction.parentObject.SetActive(true);
 	}
 
 	// Update is called once per frame
@@ -35,6 +38,21 @@ public class VRPlayerController : MonoBehaviour, IPlayerController {
 			CurrentAction.ExecuteAction();
 		} else {
 			CurrentAction.StopAction();
+		}
+
+		// Switch weapon?
+		if (SwitchTool()) {
+			int i = 0;
+
+			if (CurrentAction == dissolveAction[0]) {
+				dissolveAction[0].parentObject.SetActive(false);
+				i = 1;
+			} else {
+				dissolveAction[1].parentObject.SetActive(false);
+			}
+
+			CurrentAction = dissolveAction[i];
+			dissolveAction[i].parentObject.SetActive(true);
 		}
 	}
 

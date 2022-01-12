@@ -35,7 +35,7 @@ public class WhiteCellTrigger : MonoBehaviour {
 		}
 
 		// Do a whole dance.
-		particles.Play();
+		//particles.Play();
 		isDying = true;
 		StartCoroutine(WaitToDie());
 	}
