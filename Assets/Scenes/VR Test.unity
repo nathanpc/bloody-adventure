@@ -240,6 +240,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: White Cell
       objectReference: {fileID: 0}
+    - target: {fileID: 8137582386589288805, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
+      propertyPath: parentObject
+      value: 
+      objectReference: {fileID: 987446822}
+    - target: {fileID: 8137582386589288805, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
+      propertyPath: _damageAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8137582386589288805, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
+      propertyPath: instantiateInPlace
+      value: 
+      objectReference: {fileID: 1466451105}
     m_RemovedComponents:
     - {fileID: 2612786742873491741, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
@@ -408,11 +420,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &265539034 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4872021052891048644, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
-  m_PrefabInstance: {fileID: 151603913}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &364650338 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1264422688469860121, guid: 276719dc34d279548acb8a5b974b085f, type: 3}
@@ -675,7 +682,10 @@ MonoBehaviour:
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
+  m_KeepSelectedTargetValid: 1
   m_StartingSelectedInteractable: {fileID: 0}
   m_HoverEntered:
     m_PersistentCalls:
@@ -703,6 +713,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectActionTrigger: 0
   m_HideControllerOnSelect: 0
+  m_AllowHoveredActivate: 0
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -736,6 +747,7 @@ MonoBehaviour:
   m_LineType: 0
   m_BlendVisualLinePoints: 1
   m_MaxRaycastDistance: 30
+  m_RayOriginTransform: {fileID: 0}
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
   m_Acceleration: 9.8
@@ -753,7 +765,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
   m_HitClosestOnly: 0
-  m_KeepSelectedTargetValid: 1
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
   m_EnableUIInteraction: 1
@@ -6149,7 +6160,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 987446823}
-  - component: {fileID: 987446824}
   m_Layer: 0
   m_Name: Corona Killer
   m_TagString: Untagged
@@ -6173,25 +6183,6 @@ Transform:
   m_Father: {fileID: 1835233942}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &987446824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987446822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fc8fdf58dac9e54fbd2620ab44caa1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentObject: {fileID: 987446822}
-  _maxDistance: 1
-  _damageAmount: 10
-  _dissolvableObjectTag: Explodable
-  rigidBodyPrefab: {fileID: 1510646193536412887, guid: dfc07cb0d88087a4f986cfa768477bf9, type: 3}
-  instantiateInPlace: {fileID: 265539034}
-  throwForce: 10
 --- !u!1 &995902009
 GameObject:
   m_ObjectHideFlags: 0
@@ -6244,7 +6235,7 @@ MonoBehaviour:
   _rotationSpeed: 2
   actions:
   - {fileID: 1695084513}
-  - {fileID: 987446824}
+  - {fileID: 1466451106}
 --- !u!114 &995902013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6444,6 +6435,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186124724}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1466451105 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5718881601566264157, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
+  m_PrefabInstance: {fileID: 151603913}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1466451106 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8137582386589288805, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
+  m_PrefabInstance: {fileID: 151603913}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466451105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc8fdf58dac9e54fbd2620ab44caa1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1530024062
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6750,7 +6757,10 @@ MonoBehaviour:
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
+  m_KeepSelectedTargetValid: 1
   m_StartingSelectedInteractable: {fileID: 0}
   m_HoverEntered:
     m_PersistentCalls:
@@ -6778,6 +6788,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectActionTrigger: 0
   m_HideControllerOnSelect: 0
+  m_AllowHoveredActivate: 0
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -6811,6 +6822,7 @@ MonoBehaviour:
   m_LineType: 0
   m_BlendVisualLinePoints: 1
   m_MaxRaycastDistance: 30
+  m_RayOriginTransform: {fileID: 0}
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
   m_Acceleration: 9.8
@@ -6828,7 +6840,6 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
   m_HitClosestOnly: 0
-  m_KeepSelectedTargetValid: 1
   m_HoverToSelect: 0
   m_HoverTimeToSelect: 0.5
   m_EnableUIInteraction: 1
@@ -6920,30 +6931,17 @@ MonoBehaviour:
   showDebug: 0
   bezierCurveSamples: 50
   targets: []
---- !u!1 &1650062977 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5718881601566264157, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
+--- !u!114 &1650062978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8137582386589288805, guid: e455fb6b0e767eb4b904d506cc431304, type: 3}
   m_PrefabInstance: {fileID: 1530024062}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1650062978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1650062977}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9fc8fdf58dac9e54fbd2620ab44caa1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentObject: {fileID: 1650062977}
-  _maxDistance: 1
-  _damageAmount: 10
-  _dissolvableObjectTag: Explodable
-  rigidBodyPrefab: {fileID: 1510646193536412887, guid: dfc07cb0d88087a4f986cfa768477bf9, type: 3}
-  instantiateInPlace: {fileID: 1574762968}
-  throwForce: 10
 --- !u!114 &1695084513 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2129602310421830069, guid: 54e240d1b6871b348b22ee0e52e07856, type: 3}
@@ -7306,13 +7304,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7448815bd5148434682b3d931066cd10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RigBaseGameObject: {fileID: 1918366776}
+  m_Camera: {fileID: 0}
+  m_OriginBaseGameObject: {fileID: 1918366776}
   m_CameraFloorOffsetObject: {fileID: 164948836}
-  m_CameraGameObject: {fileID: 905240580}
   m_RequestedTrackingOriginMode: 0
   m_CameraYOffset: 1.36144
-  m_TrackingSpace: 3
-  m_TrackingOriginMode: -2147483648
+  m_CameraGameObject: {fileID: 905240580}
 --- !u!1 &1922862067
 GameObject:
   m_ObjectHideFlags: 0

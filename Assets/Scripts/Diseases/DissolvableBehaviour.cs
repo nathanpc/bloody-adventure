@@ -6,7 +6,9 @@ using UnityEngine;
 /// How a dissolvable object behaves.
 /// </summary>
 public class DissolvableBehaviour : DiseaseBehaviour {
+	[Header("Effects")]
 	[SerializeField] private ParticleSystem _particles;
+
 	private float _originalScale;
 
 	void Start() {
@@ -33,14 +35,19 @@ public class DissolvableBehaviour : DiseaseBehaviour {
 
 		// Show pretty particles.
 		Particles.Play();
+
+		// Play a hit sound.
+		if (audioSource.isPlaying)
+			audioSource.Stop();
+		audioSource.Play();
 	}
 
 	/// <summary>
 	/// Coroutine function to wait for the particle effect to end before dying.
 	/// </summary>
 	IEnumerator WaitToDie() {
-		// Wait for the particle show to stop.
-		while (Particles.isPlaying)
+		// Wait for the particle show or sound to stop.
+		while (Particles.isPlaying || audioSource.isPlaying)
 			yield return new WaitForSeconds(1);
 
 		Die();

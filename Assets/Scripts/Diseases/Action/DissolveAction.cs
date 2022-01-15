@@ -6,10 +6,9 @@ using UnityEngine;
 /// Action script for the cholesterol dissolver spray.
 /// </summary>
 public class DissolveAction : ActionBase {
-	[SerializeField] private int _damageAmount = 1;
-	[SerializeField] private string _dissolvableObjectTag;
-	[SerializeField] private ParticleSystem _particles;
+	[Header("Spray Bottle")]
 	public GameObject trigger;
+	
 	private GameObject _sprayer;
 	private bool triggered = false;
 
@@ -29,12 +28,16 @@ public class DissolveAction : ActionBase {
 		}
 
 		// Show a nice spray!
-		SprayParticles.Play();
+		Particles.Play();
+
+		// Play the spray sound.
+		if (!audioSource.isPlaying)
+			audioSource.Play();
 
 		// Raycast and check if we actually have hit some cholesterol.
 		if (DoCameraRaycast(out hit)) {
 			// Check if we can actually dissolve the item that was hit.
-			if (hit.transform.tag == DissolvableObjectTag) {
+			if (hit.transform.tag == ActionableObjectTag) {
 				DiseaseBehaviour diseaseBehaviour =
 					hit.transform.gameObject.GetComponent<DiseaseBehaviour>();
 
@@ -58,29 +61,5 @@ public class DissolveAction : ActionBase {
 	public GameObject Sprayer {
 		get { return _sprayer; }
 		set { _sprayer = value; }
-	}
-
-	/// <summary>
-	/// Spraying particles.
-	/// </summary>
-	public ParticleSystem SprayParticles {
-		get { return _particles; }
-		set { _particles = value; }
-	}
-
-	/// <summary>
-	/// Amount of damage to inflict.
-	/// </summary>
-	public int DamageAmount {
-		get { return _damageAmount; }
-		set { _damageAmount = value; }
-	}
-
-	/// <summary>
-	/// Which <see cref="GameObject"/> tag is actually used for dissolvable items?
-	/// </summary>
-	public string DissolvableObjectTag {
-		get { return _dissolvableObjectTag; }
-		set { _dissolvableObjectTag = value; }
 	}
 }

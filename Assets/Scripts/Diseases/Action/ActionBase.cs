@@ -6,8 +6,19 @@ using UnityEngine;
 /// Player action abstraction interface.
 /// </summary>
 public abstract class ActionBase : MonoBehaviour {
+	[Header("General")]
 	public GameObject parentObject;
+
+	[Header("Interaction")]
+	[SerializeField] private string _actionableObjectTag;
+	[SerializeField] private int _damageAmount = 1;
 	[SerializeField] private float _maxDistance = 1.0f;
+
+	[Header("Effects")]
+	[SerializeField] private ParticleSystem _particles;
+
+	[Header("Sounds")]
+	public AudioSource audioSource;
 
 	/// <summary>
 	/// Executes an action depending on what's needed from the user.
@@ -40,10 +51,35 @@ public abstract class ActionBase : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Which <see cref="GameObject"/> tag is actually able to be interacted
+	/// with from this action.
+	/// </summary>
+	public string ActionableObjectTag {
+		get { return _actionableObjectTag; }
+		set { _actionableObjectTag = value; }
+	}
+
+	/// <summary>
+	/// Amount of damage to inflict.
+	/// </summary>
+	public int DamageAmount {
+		get { return _damageAmount; }
+		set { _damageAmount = value; }
+	}
+
+	/// <summary>
 	/// Maximum distance the action can have an effect.
 	/// </summary>
 	public float MaxDistance {
 		get { return _maxDistance; }
 		set { _maxDistance = value; }
+	}
+
+	/// <summary>
+	/// Fancy particles.
+	/// </summary>
+	public ParticleSystem Particles {
+		get { return _particles; }
+		set { _particles = value; }
 	}
 }

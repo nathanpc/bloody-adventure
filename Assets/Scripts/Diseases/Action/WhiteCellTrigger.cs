@@ -26,7 +26,7 @@ public class WhiteCellTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col) {
 		// Check if the virus actually collided with us.
-		if (col.tag == action.DissolvableObjectTag) {
+		if (col.tag == action.ActionableObjectTag) {
 			DiseaseBehaviour diseaseBehaviour =
 				col.transform.gameObject.GetComponent<DiseaseBehaviour>();
 

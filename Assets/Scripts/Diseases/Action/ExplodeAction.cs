@@ -6,12 +6,11 @@ using UnityEngine;
 /// Action script for the COVID exploder cell.
 /// </summary>
 public class ExplodeAction : ActionBase {
-	[SerializeField] private int _damageAmount = 1;
-	[SerializeField] private string _dissolvableObjectTag;
-	//[SerializeField] private ParticleSystem _particles;
+	[Header("White Cell")]
 	public GameObject rigidBodyPrefab;
 	public GameObject instantiateInPlace;
 	public float throwForce;
+
 	private GameObject _cell;
 
 	// Start is called before the first frame update
@@ -31,6 +30,11 @@ public class ExplodeAction : ActionBase {
 		Vector3 direction = Vector3.right;
 		direction = instantiateInPlace.transform.forward;
 
+		// Play the throw sound.
+		if (audioSource.isPlaying)
+			audioSource.Stop();
+		audioSource.Play();
+
 		// Throw the cell!
 		rigidCell.GetComponentInChildren<Rigidbody>().AddRelativeForce(
 			direction * throwForce, ForceMode.Impulse);
@@ -45,31 +49,5 @@ public class ExplodeAction : ActionBase {
 	public GameObject Cell {
 		get { return _cell; }
 		set { _cell = value; }
-	}
-
-	/*
-	/// <summary>
-	/// Spraying particles.
-	/// </summary>
-	public ParticleSystem SprayParticles {
-		get { return _particles; }
-		set { _particles = value; }
-	}
-	*/
-
-	/// <summary>
-	/// Amount of damage to inflict.
-	/// </summary>
-	public int DamageAmount {
-		get { return _damageAmount; }
-		set { _damageAmount = value; }
-	}
-
-	/// <summary>
-	/// Which <see cref="GameObject"/> tag is actually used for dissolvable items?
-	/// </summary>
-	public string DissolvableObjectTag {
-		get { return _dissolvableObjectTag; }
-		set { _dissolvableObjectTag = value; }
 	}
 }

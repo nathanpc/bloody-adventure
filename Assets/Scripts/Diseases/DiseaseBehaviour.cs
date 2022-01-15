@@ -6,7 +6,11 @@ using UnityEngine;
 /// Abstracts away the random behaviours of our diseases.
 /// </summary>
 public abstract class DiseaseBehaviour : MonoBehaviour {
+	[Header("Health")]
 	[SerializeField] private int _hitPoints = 100;
+
+	[Header("Sounds")]
+	[SerializeField] protected AudioSource audioSource;
 
 	/// <summary>
 	/// Inflicts damage to the object.
