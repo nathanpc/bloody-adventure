@@ -73,7 +73,7 @@ public class VRPlayerController : MonoBehaviour, IPlayerController {
 	}
 
 	public bool SwitchTool() {
-		return Input.GetButton("Switch Tool");
+		return Input.GetButtonDown("Switch Tool");
 	}
 
 	public bool MainFire() {

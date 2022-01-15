@@ -74,7 +74,7 @@ public class DesktopPlayerController : MonoBehaviour, IPlayerController {
 	}
 
 	public bool SwitchTool() {
-		return Input.GetButton("Switch Tool");
+		return Input.GetButtonDown("Switch Tool");
 	}
 
 	public bool MainFire() {
